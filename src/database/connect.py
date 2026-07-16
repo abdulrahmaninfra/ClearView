@@ -1,10 +1,9 @@
 import sqlite3
 
-conn = sqlite3.connect("windshield.db")
-cursor = conn.cursor()
-
 
 def create_db():
+    conn = sqlite3.connect("windshield.db")
+    cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS windshields (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,6 +15,8 @@ def create_db():
             stock INTEGER NOT NULL
         )
     """)
+    conn.commit()
+    conn.close()
 
 
 def get_db_connection():
