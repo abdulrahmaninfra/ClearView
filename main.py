@@ -1,6 +1,9 @@
-# from src.database.create
-# from src.database.delete import delete_windshield
-# from src.database.update import update_windshield
-from src.database.read import GetWindshield
+from fastapi import FastAPI
 
-GetWindshield().print_all_windshield()
+from src.api.route import router
+from src.database.connect import create_db
+
+create_db()
+
+app = FastAPI(title="ClearView Windshield API")
+app.include_router(router)
