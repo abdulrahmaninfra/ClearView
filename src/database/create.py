@@ -1,5 +1,4 @@
 import sqlite3
-from typing import Optional
 
 
 class CreateWindshield:
@@ -19,7 +18,7 @@ class CreateWindshield:
         self.price = price
         self.stock = stock
 
-    def create(self, conn: sqlite3.Connection) -> int:
+    def create_windshield(self, conn: sqlite3.Connection):
         cursor = conn.cursor()
         new_element = (
             self.brand,
@@ -34,4 +33,7 @@ class CreateWindshield:
             new_element,
         )
         conn.commit()
-        return cursor.lastrowid
+        # Return the newly created row so the route can return it
+        new_id = cursor.lastrowid
+        cursor.execute("SELECT * FROM windshields WHERE id = ?", (new_id,))
+        return cursor.fetchone()
