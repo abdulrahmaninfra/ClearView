@@ -1,30 +1,52 @@
-from .connect import cursor
+import sqlite3
+from typing import Optional
 
 
 class GetWindshield:
-    def __get_all(self):
+    def __init__(self, conn: sqlite3.Connection):
+        self.conn = conn
+
+    def get_all_windshield(self):
+        cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM windshields")
         return cursor.fetchall()
 
-    def __get_by_id(self, windshield_id: int):
+    def get_windshield(self, windshield_id: int):
+        cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM windshields WHERE id = ?", (windshield_id,))
         return cursor.fetchone()
 
-    def get_windshield(self, windshield_id: int):
-        windshield = self.__get_by_id(windshield_id)
-        if windshield:
-            print(
-                f"ID: {windshield[0]}\n    Brand: {windshield[1]}\n    Model: {windshield[2]}\n    Year: {windshield[3]}\n    Glass Type: {windshield[4]}\n    Price: ${windshield[5]}\n    Stock: {windshield[6]}\n"
-            )
-            return windshield
-        else:
-            print(f"No windshield found with ID: {windshield_id}")
+    def search_windshield(
+        self,
+        brand: Optional[str] = None,
+        model: Optional[str] = None,
+        year: Optional[int] = None,
+    ):
+        conditions = []
+        params = []
 
-    def get_all_windshield(self):
-        return self.__get_all()
+        if brand is not None:
+            conditions.append("brand LIKE ?")
+            params.append(f"%{brand}%")
+
+        if model is not None:
+            conditions.append("model LIKE ?")
+            params.append(f"%{model}%")
+
+        if year is not None:
+            conditions.append("year = ?")
+            params.append(year)
+
+        query = "SELECT * FROM windshields"
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+
+        cursor = self.conn.cursor()
+        cursor.execute(query, params)
+        return cursor.fetchall()
 
     def print_all_windshield(self):
-        windshields = self.__get_all()
+        windshields = self.get_all_windshield()
         for windshield in windshields:
             print(
                 f"ID: {windshield[0]}\n    Brand: {windshield[1]}\n    Model: {windshield[2]}\n    Year: {windshield[3]}\n    Glass Type: {windshield[4]}\n    Price: ${windshield[5]}\n    Stock: {windshield[6]}\n"
