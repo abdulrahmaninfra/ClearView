@@ -1,10 +1,9 @@
 import sqlite3
 
-from .connect import conn, cursor
-
 
 def UpdateWindshield(
     windshield_id: int,
+    conn: sqlite3.Connection,
     brand: str = None,
     model: str = None,
     year: int = None,
@@ -15,33 +14,31 @@ def UpdateWindshield(
     update_fields = []
     params = []
 
-    if brand:
-        update_fields.append("brand= ?")
+    if brand is not None:
+        update_fields.append("brand = ?")
         params.append(brand)
-    if model:
-        update_fields.append("model= ?")
+    if model is not None:
+        update_fields.append("model = ?")
         params.append(model)
-    if year:
-        update_fields.append("year= ?")
+    if year is not None:
+        update_fields.append("year = ?")
         params.append(year)
-    if glass_type:
-        update_fields.append("glass_type= ?")
+    if glass_type is not None:
+        update_fields.append("glass_type = ?")
         params.append(glass_type)
-    if price:
-        update_fields.append("price= ?")
+    if price is not None:
+        update_fields.append("price = ?")
         params.append(price)
     if stock is not None:
-        update_fields.append("stock= ?")
+        update_fields.append("stock = ?")
         params.append(stock)
 
     if not update_fields:
         return
 
-    query = f"UPDATE windshields SET {','.join(update_fields)} WHERE id = ?"
+    query = f"UPDATE windshields SET {', '.join(update_fields)} WHERE id = ?"
     params.append(windshield_id)
 
-    try:
-        cursor.execute(query, params)
-        conn.commit()
-    except sqlite3.Error as e:
-        print(f"Error updating windshield: {e}")
+    cursor = conn.cursor()
+    cursor.execute(query, params)
+    conn.commit()
