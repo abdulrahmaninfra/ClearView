@@ -1,99 +1,152 @@
-# ClearView Windshield API
+# ClearView
 
-A FastAPI-based REST API for managing windshield inventory. Supports full CRUD operations with dynamic filtering, thread-safe SQLite connections, and structured error handling.
+A **FastAPI**-based windshield inventory management system with encrypted SQLite storage (SQLCipher), full CRUD operations, dynamic filtering, and thread-safe database connections.
+
+---
 
 ## Project Structure
 
 ```
-windshield_project/
-├── main.py                 # FastAPI application entry point & DB initialization
-├── requirements.txt        # Python dependencies
-├── windshield.db           # SQLite database (auto-generated)
-└── src/
-    ├── api/
-    │   ├── route.py        # API routes / controller endpoints
-    │   └── schema.py       # Pydantic models for validation & responses
-    └── database/
-        ├── __init__.py
-        ├── connect.py      # SQLite connection factory & table creation
-        ├── create.py       # Create operations
-        ├── read.py         # Read operations with search/filtering
-        ├── update.py       # Update operations
-        └── delete.py       # Delete operations
+.
+├── README.md
+├── PROJECT_ANALYSIS.md
+├── requirements.txt
+└── backend/
+    ├── .env.example               # Environment variable template
+    ├── main.py                    # FastAPI app entry point
+    └── src/
+        ├── api/
+        │   ├── route.py           # API routes (CRUD endpoints)
+        │   └── schema.py          # Pydantic request/response models
+        ├── core/
+        │   └── config.py          # Application settings (pydantic-settings)
+        └── database/
+            ├── __init__.py
+            ├── connect.py         # SQLCipher connection factory & table creation
+            ├── create.py          # CreateWindshield class
+            ├── read.py            # GetWindshield class (search/filter/get-all)
+            ├── update.py          # UpdateWindshield helper function
+            └── delete.py          # DeleteWindshield class
 ```
+
+---
 
 ## Dependencies
 
-- **FastAPI** – Web framework
-- **Uvicorn** – ASGI server
-- **sqlite3** (stdlib) – Database (SQLAlchemy installed but unused)
-- **python-dotenv** – Environment variable loading
+| Package            | Purpose                        |
+|--------------------|---------------------------------|
+| **FastAPI**        | Web framework                  |
+| **Uvicorn**        | ASGI server                    |
+| **Pydantic**       | Data validation & serialization |
+| **pydantic-settings** | Settings management via `.env` |
+| **sqlcipher3**     | Encrypted SQLite database       |
+| **python-dotenv**  | Load environment variables      |
+
+---
+
+## Setup
+
+```bash
+# 1. Copy environment template
+cp backend/.env.example backend/.env
+
+# 2. Edit backend/.env with your credentials
+#    DATABASE_PASSWORD is required — this encrypts the SQLite database
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run from the backend directory
+cd backend
+
+# Option A — via uvicorn directly
+uvicorn main:app --reload
+
+# Option B — via python (uses uvicorn under the hood)
+python main.py
+```
+
+The API documentation is auto-generated at [http://localhost:8000/docs](http://localhost:8000/docs).
+
+---
+
+## Environment Variables (`.env`)
+
+| Variable           | Default         | Description               |
+|--------------------|-----------------|---------------------------|
+| `DATABASE_NAME`    | `database.db`   | SQLite database filename  |
+| `DATABASE_PASSWORD`| *(required)*    | Encryption passphrase     |
+| `HOST`             | `127.0.0.1`     | Server bind address       |
+| `PORT`             | `8000`          | Server port               |
+
+---
 
 ## Database Schema
 
-### `windshields` Table
+### Table: `windshields`
 
-| Column     | Type    | Constraints              |
-|------------|---------|--------------------------|
-| id         | INTEGER | PRIMARY KEY AUTOINCREMENT |
-| brand      | TEXT    | NOT NULL                 |
-| model      | TEXT    | NOT NULL                 |
-| year       | INTEGER | NOT NULL                 |
-| glass_type | TEXT    | NOT NULL                 |
-| price      | REAL    | NOT NULL                 |
-| stock      | INTEGER | NOT NULL                 |
+Encrypted via **SQLCipher** (256-bit AES).
+
+| Column      | Type    | Constraints               |
+|-------------|---------|---------------------------|
+| `id`        | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| `brand`     | TEXT    | NOT NULL                  |
+| `model`     | TEXT    | NOT NULL                  |
+| `year`      | INTEGER | NOT NULL                  |
+| `glass_type`| TEXT    | NOT NULL                  |
+| `price`     | REAL    | NOT NULL                  |
+| `stock`     | INTEGER | NOT NULL                  |
+
+---
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/windshield` | List windshields (optional filters: `brand`, `model`, `year`) |
-| GET | `/windshield/{id}` | Get windshield by ID |
-| POST | `/windshield` | Create a windshield entry |
-| PUT | `/windshield/{id}` | Partially update a windshield |
-| DELETE | `/windshield/{id}` | Delete a windshield |
+| Method | Endpoint                    | Description                                      |
+|--------|-----------------------------|--------------------------------------------------|
+| GET    | `/windshield`               | List windshields (optional filters: `brand`, `model`, `year`) |
+| GET    | `/windshield/{id}`          | Get single windshield by ID                      |
+| POST   | `/windshield`               | Create a new windshield entry (status 201)       |
+| PUT    | `/windshield/{id}`          | Partially update a windshield                    |
+| DELETE | `/windshield/{id}`          | Delete a windshield                              |
 
-### Request/Response Schemas
+### Request Schemas
 
-**WindshieldCreate** (POST):
+**POST /windshield**
 ```json
 {
-  "brand": "Honda",
-  "model": "Civic",
+  "brand": "Pilkington",
+  "model": "Chiron",
   "year": 2022,
-  "glass_type": "Laminated Acoustic",
+  "glass_type": "Ballistic Armor",
   "price": 250.0,
   "stock": 15
 }
 ```
 *Constraints: `price > 0`, `stock >= 0`*
 
-**WindshieldUpdate** (PUT) – all fields optional.
+**PUT /windshield/{id}** — all fields optional (same constraints apply if provided).
 
-**WindshieldResponse** (GET/POST/PUT):
+### Response Schema
+
+All data endpoints return:
 ```json
 {
   "id": 1,
-  "brand": "Honda",
-  "model": "Civic",
+  "brand": "Pilkington",
+  "model": "Chiron",
   "year": 2022,
-  "glass_type": "Laminated Acoustic",
+  "glass_type": "Ballistic Armor",
   "price": 250.0,
   "stock": 15
 }
 ```
 
-## Architecture Highlights
+---
 
-- **Thread-safe DB** – Each request gets an isolated SQLite connection via FastAPI dependency injection, automatically closed after the request.
-- **Robust error handling** – DB and runtime errors map to structured HTTP responses (404, 500).
-- **Dynamic filtering** – `GET /windshield` adapts the SQL `WHERE` clause based on provided query parameters; returns all records when called without filters.
+## Architecture & Design Decisions
 
-## Getting Started
-
-```bash
-pip install -r requirements.txt
-python main.py OR uvicorn main:app --port 8000 --reload
-```
-
-Visit `http://localhost:8000/docs` for interactive API documentation (auto-generated by FastAPI).
+- **Encrypted at rest** — Database is encrypted via SQLCipher with a passphrase from `.env`.
+- **Thread-safe connections** — Each request gets an isolated connection via FastAPI dependency injection (`get_db_connection()`), automatically closed after the request.
+- **Exception handling** — Database and runtime errors are mapped to structured HTTP responses (`404`, `500`). `HTTPException`s are re-raised (not swallowed).
+- **Dynamic filtering** — `GET /windshield` builds the `WHERE` clause adaptively from query parameters; omit all params to fetch every record.
+- **CORS & GZip** — CORS middleware configured via settings; GZip compression enabled for responses > 1 KB.
