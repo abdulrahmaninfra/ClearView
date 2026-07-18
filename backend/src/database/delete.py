@@ -1,4 +1,4 @@
-import sqlite3
+from sqlcipher3 import dbapi2 as sqlite3
 
 
 class DeleteWindshield:
@@ -8,7 +8,5 @@ class DeleteWindshield:
 
     def delete(self):
         cursor = self.conn.cursor()
-        cursor.execute(
-            "DELETE FROM windshields WHERE id = ?", (self.windshield_id,)
-        )
+        cursor.execute("DELETE FROM windshields WHERE id = ?", (self.windshield_id,))
         self.conn.commit()

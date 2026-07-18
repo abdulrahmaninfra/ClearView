@@ -2,7 +2,6 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-
 from src.api.route import router
 from src.core.config import Settings
 from src.database.connect import create_db
@@ -34,4 +33,4 @@ def create_application() -> FastAPI:
 app = create_application()
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host=settings.HOST, port=settings.PORT)
+    uvicorn.run(app, host=settings.HOST, port=settings.PORT, reload=True)

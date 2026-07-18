@@ -8,14 +8,16 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="allow")
 
     API_TITLE: str = "Clearview"
     API_DESCRIPTION: str = "A windshield inventory management system"
     API_VERSION: str = "ALPHA"
 
     DATABASE_URL: str = ""
-    DATABASE_NAME: str = str(os.getenv("DB_NAME"))
+    DATABASE_NAME: str = str(os.getenv("DATABASE_NAME"))
+    DATABASE_PASSWORD: str = str(os.getenv("DATABASE_PASSWORD"))
+
     ALLOWED_ORIGINS: list[str] = [
         f"localhost:{os.getenv('PORT')}",
         f"127.0.0.1:{os.getenv('PORT')}",

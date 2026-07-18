@@ -2,7 +2,6 @@ import sqlite3
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-
 from src.api.schema import WindshieldCreate, WindshieldResponse, WindshieldUpdate
 from src.database.connect import get_db_connection
 from src.database.create import CreateWindshield
