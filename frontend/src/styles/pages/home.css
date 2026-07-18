@@ -1,0 +1,92 @@
+/* ============================================================
+   ClearView Windshield — Home Page Styles
+   ============================================================ */
+
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.home-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.action-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  cursor: pointer;
+  min-height: 120px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  text-decoration: none;
+}
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+.action-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--color-muted);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.action-card:hover .action-icon {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.action-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.action-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+.action-subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-muted-fg);
+}
+
+.home-table {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .home-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-stats {
+    grid-template-columns: 1fr;
+  }
+}

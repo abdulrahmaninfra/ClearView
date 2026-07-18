@@ -1,0 +1,183 @@
+/* ============================================================
+   ClearView Windshield — Search Page Styles
+   ============================================================ */
+
+.search-tabs {
+  margin-bottom: var(--space-6);
+  max-width: 500px;
+}
+
+.search-id-section,
+.search-brand-section {
+  display: none;
+}
+
+.search-id-section.active,
+.search-brand-section.active {
+  display: block;
+}
+
+.search-form-wrap {
+  max-width: 500px;
+  margin-bottom: var(--space-6);
+}
+
+/* ── Brand Carousel ── */
+.carousel-wrapper {
+  position: relative;
+  margin-bottom: var(--space-6);
+  padding: 0 var(--space-6);
+}
+
+.brand-carousel {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: var(--space-2) 0;
+  /* Hide scrollbar */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.brand-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.brand-tile {
+  width: 140px;
+  min-width: 140px;
+  scroll-snap-align: start;
+  background: var(--color-card);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4) var(--space-3);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.brand-tile:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+.brand-tile--active {
+  border-color: var(--color-accent);
+  background: rgba(5, 150, 105, 0.04);
+}
+.brand-tile-name {
+  font-weight: 600;
+  color: var(--color-fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brand-tile-count {
+  font-size: var(--text-xs);
+  color: var(--color-muted-fg);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  z-index: 10;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.carousel-btn:hover {
+  background: var(--color-card);
+  box-shadow: var(--shadow-md);
+  color: var(--color-accent);
+}
+.carousel-btn.left {
+  left: 0;
+}
+.carousel-btn.right {
+  right: 0;
+}
+
+/* ── Results Grid ── */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+  transition: opacity 150ms ease-out;
+}
+.results-grid--loading {
+  opacity: 0.4;
+}
+
+.result-card {
+  /* Extends .card */
+}
+.result-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-3);
+}
+.result-brand {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-fg);
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+.result-model-year {
+  font-size: var(--text-sm);
+  color: var(--color-muted-fg);
+}
+.result-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+.result-detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+}
+.result-detail-label {
+  color: var(--color-muted-fg);
+}
+.result-detail-value {
+  font-weight: 500;
+  color: var(--color-fg);
+}
+.result-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+.result-id {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted-fg);
+}
+
+@media (max-width: 768px) {
+  .carousel-wrapper {
+    padding: 0;
+  }
+  .carousel-btn {
+    display: none; /* Rely on swipe for mobile */
+  }
+}

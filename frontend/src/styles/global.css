@@ -1,0 +1,131 @@
+/* ============================================================
+   ClearView Windshield — Global Styles
+   Body defaults, scrollbar, focus-visible, transitions, utilities
+   ============================================================ */
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+}
+
+/* ── Main content area ── */
+#app {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-5) var(--space-8);
+  padding-top: calc(var(--nav-height) + var(--space-5));
+  min-height: 100dvh;
+}
+
+@media (max-width: 768px) {
+  #app {
+    padding: var(--space-4);
+    padding-top: calc(var(--nav-height) + var(--space-4));
+    padding-bottom: calc(var(--nav-height-mobile) + var(--space-7));
+  }
+}
+
+/* ── Focus visible ── */
+:focus-visible {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-fg);
+}
+
+/* ── Selection ── */
+::selection {
+  background: rgba(5, 150, 105, 0.15);
+  color: var(--color-fg);
+}
+
+/* ── Toast container ── */
+#toast-container {
+  position: fixed;
+  top: calc(var(--nav-height) + var(--space-4));
+  right: var(--space-5);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  pointer-events: none;
+  max-width: 400px;
+}
+#toast-container > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  #toast-container {
+    right: var(--space-3);
+    left: var(--space-3);
+    max-width: none;
+  }
+}
+
+/* ── Modal root ── */
+#modal-root:empty {
+  display: none;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Typography utility classes ── */
+.font-heading {
+  font-family: var(--font-heading);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* ── Text colors ── */
+.text-muted {
+  color: var(--color-muted-fg);
+}
+.text-accent {
+  color: var(--color-accent);
+}
+.text-destructive {
+  color: var(--color-destructive);
+}
+.text-warning {
+  color: var(--color-warning);
+}
+
+/* ── Visually hidden (screen reader only) ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

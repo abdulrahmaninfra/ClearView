@@ -1,0 +1,121 @@
+/* ============================================================
+   ClearView Windshield — Update & Delete Shared Styles
+   (Step indicator and transitions)
+   ============================================================ */
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-6);
+  max-width: 600px;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  position: relative;
+  z-index: 2;
+}
+
+.step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background: var(--color-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--color-muted-fg);
+  transition: all var(--transition-base);
+}
+.step-dot--active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.step-dot--complete {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.step-label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-muted-fg);
+  white-space: nowrap;
+}
+.step-item.active .step-label {
+  color: var(--color-fg);
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--color-border);
+  margin: 0 var(--space-2);
+  position: relative;
+  top: -10px;
+  z-index: 1;
+  transition: background var(--transition-base);
+}
+.step-line--complete {
+  background: var(--color-accent);
+}
+
+/* ── Containers ── */
+.update-step, .delete-step {
+  display: none;
+  animation: fade-in-right 0.3s ease-out;
+}
+.update-step.active, .delete-step.active {
+  display: block;
+}
+
+@keyframes fade-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Update Specific ── */
+.update-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  background: var(--color-card);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+}
+@media (max-width: 600px) {
+  .update-form { grid-template-columns: 1fr; }
+}
+
+.update-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.verification-box {
+  border: 1.5px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  background: var(--color-card);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+.verify-input {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  letter-spacing: 2px;
+  text-align: center;
+  max-width: 300px;
+  margin: var(--space-3) 0;
+}

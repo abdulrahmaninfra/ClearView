@@ -1,8 +1,12 @@
 import sqlite3
 
+from ..core.config import Settings
+
+settings = Settings()
+
 
 def create_db():
-    conn = sqlite3.connect("windshield.db")
+    conn = sqlite3.connect(settings.DATABASE_NAME)
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS windshields (
